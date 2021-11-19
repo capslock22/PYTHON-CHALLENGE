@@ -21,6 +21,7 @@
         <tbody>
             {% for dish in cuisine.display.all%}
                 <tr>
+                    <td><img src="{{dish.image.url}}"></td>
                     <td>{{dish.name}}</td>
                     <td>{{dish.description}}</td>
                     <td>

@@ -17,7 +17,4 @@ class DishForm(forms.ModelForm):
     class Meta:
         model = Dish
 
-        fields = [
-            "name",
-            "description",
-        ]
+        fields = "__all__"

@@ -20,7 +20,7 @@ def cuisine(request):
 
 def dish(request):
     if request.method == "POST":
-        form = DishForm(request.POST)
+        form = DishForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 form.save()
@@ -36,16 +36,19 @@ def dish_insert(request, cuisine_id):
     if request.method == "GET":
         return render(request, 'dish.html',{'cuisines':cuisine})
     elif request.method == "POST":
-        form = DishForm(request.POST)
+        context = {}
+        form = DishForm(request.POST, request.FILES)
         if form.is_valid():
             try:
                 form.save()
                 return redirect('/cuisine_show')
             except:
                 pass
+        context['form'] = form
     else:
         form = DishForm()
     return render(request, 'index.html', {'form': form})
+
 def cuisine_show(request):
     cuisines = Cuisine.objects.all()
     return render(request,'cuisine_show.html',{'cuisines':cuisines})

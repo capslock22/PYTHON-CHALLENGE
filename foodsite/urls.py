@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from foodapp import views
+from django.conf import settings
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
     path('', views.cuisine_show, name='home'),
@@ -31,3 +34,5 @@ urlpatterns = [
     path('dish_update/<int:id>', views.cuisine_update),
     path('dish_delete/<int:id>', views.dish_delete),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
