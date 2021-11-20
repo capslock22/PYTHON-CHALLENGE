@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.utils import html
 from .models import Cuisine, Dish
 from .forms import CuisineForm, DishForm
+
 # Create your views here.
 
 def cuisine(request):
@@ -18,7 +19,8 @@ def cuisine(request):
         form = CuisineForm()
     return render(request, 'index.html',{'form':form})
 
-def dish(request):
+def dish(request,cuisine_id):
+    dish = Dish.objects.get(id=cuisine_id)
     if request.method == "POST":
         form = DishForm(request.POST, request.FILES)
         if form.is_valid():
@@ -29,25 +31,24 @@ def dish(request):
                 pass
     else:
         form = DishForm()
-    return render(request, 'index.html',{'form':form})
+    return render(request, 'dish.html',{'form':form})
 
-def dish_insert(request, cuisine_id):
-    cuisine = Cuisine.objects.get(id=cuisine_id)
-    if request.method == "GET":
-        return render(request, 'dish.html',{'cuisines':cuisine})
-    elif request.method == "POST":
-        context = {}
-        form = DishForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                form.save()
-                return redirect('/cuisine_show')
-            except:
-                pass
-        context['form'] = form
-    else:
-        form = DishForm()
-    return render(request, 'index.html', {'form': form})
+# def dish_insert(request, cuisine_id):
+#     cuisine = Cuisine.objects.get(id=cuisine_id)
+#     if request.method == "GET":
+#         return render(request, 'dish.html',{'cuisines':cuisine})
+#     elif request.method == "POST":
+#         form = DishForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             try:
+#                 form.save()
+#                 return redirect('/cuisine_show')
+#             except:
+#                 pass
+#         context = {'form':form}
+#     else:
+#         form = DishForm()
+#     return render(request, 'dish.html', context)
 
 def cuisine_show(request):
     cuisines = Cuisine.objects.all()
@@ -56,6 +57,10 @@ def cuisine_show(request):
 def dish_show(request, cuisine_id):
     cuisine = Cuisine.objects.get(id=cuisine_id)
     return render(request,'dish_show.html', {'cuisine':cuisine})
+
+
+
+
 
 def cuisine_edit(request, id):
     cuisines = Cuisine.objects.get(id=id)
